@@ -15,21 +15,17 @@ function scene:create( event )
 
     self.title = GUI:banner({
         parent = self.view,
-        text   = App.NAME
+        text   = App.NAME,
+        width  = 900,
+        height = 200
     })
 
     self.playButton       = self:drawPlayButton()
-    self.shopButton       = self:drawShopButton()
-    self.collectionButton = self:drawCollectionButton()
 end
 
 function scene:show( event )
     if ( event.phase == 'did' ) then
         utils.bounce(self.title)
-        utils.bounce(self.playButton, 1.6)
-        utils.bounce(self.shopButton, 1.6)
-        utils.bounce(self.collectionButton, 1.6)
-        utils.bounce(self.toggleActionsButton, .7)
     end
 end
 
@@ -53,8 +49,6 @@ function scene:drawActions()
             self:toggleActions()
         end
     })
-
-    self:redrawMusicButton()
 
     self.infoButton = Button:icon({
         parent = self.actions,
@@ -124,33 +118,6 @@ function scene:rotateButton(button, back)
     })
 end
 
---------------------------------------------------------------------------------
-
-function scene:redrawMusicButton()
-    if(self.musicButton) then
-        display.remove(self.musicButton)
-    end
-
-    local musicType = 'music'
-    if(Sound.isOff) then
-        musicType = 'music-off'
-    end
-
-    self.musicButton = Button:icon({
-        parent = self.actions,
-        type   = musicType,
-        x      = 220,
-        y      = 0,
-        scale  = .7,
-        action = function()
-            Sound:toggleAll()
-            self:redrawMusicButton()
-        end
-    })
-end
-
---------------------------------------------------------------------------------
-
 function scene:drawButton(options)
     return Button:icon({
         parent = self.view,
@@ -177,24 +144,6 @@ function scene:drawPlayButton()
         x                  = display.contentWidth*0.5,
         y                  = display.contentHeight*0.5,
         screen             = Router.PLAYGROUND
-    })
-end
-
-function scene:drawShopButton()
-    return self:drawButton({
-        analyticsEventName = 'home-shop-button',
-        x                  = display.contentWidth*0.35,
-        y                  = display.contentHeight*0.5,
-        screen             = Router.SHOP
-    })
-end
-
-function scene:drawCollectionButton()
-    return self:drawButton({
-        analyticsEventName = 'home-collection-button',
-        x                  = display.contentWidth*0.65,
-        y                  = display.contentHeight*0.5,
-        screen             = Router.COLLECTION
     })
 end
 

@@ -1,6 +1,5 @@
 
 local physics = require( 'physics' )
--- physics.setDrawMode( 'hybrid' )
 
 local MIN = - display.contentHeight * 0.5 + 80
 local MAX = display.contentHeight * 0.5 - 30

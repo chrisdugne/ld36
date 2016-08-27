@@ -16,41 +16,64 @@ end
 
 --------------------------------------------------------------------------------
 
+function Cerise:onCollision(event)
+    if(event.phase == 'ended') then
+        local bird = event.other
+        utils.tprint('hit a bird')
+    end
+end
+
+--------------------------------------------------------------------------------
+
 function Cerise:show()
-    self.display = display.newImage(
+    self.body = _.extend(display.newImage(
         'assets/images/game/avatars/profile.1.png'
-    )
+    ), self)
 
-    self.parent:insert(self.display)
+    self.parent:insert(self.body)
 
-    self.display.x = 140 - display.contentWidth * 0.5
-    self.display.y = self.y
-    self.display.rotation = self.rotation
+    self.body.x = 140 - display.contentWidth * 0.5
+    self.body.y = self.y
+    self.body.rotation = self.rotation
 
-    self.focus = Focus(self.display, {
+    --------------------
+
+    self.focus = Focus(self.body, {
         all    = false,
         up     = true,
         bottom = true,
         type   = 'from-center'
     })
 
+    --------------------
+
     local onDrag = function(event)
         self:drag(event)
     end
 
-    self.display:addEventListener( 'touch', onDrag)
+    self.body:addEventListener( 'touch', onDrag)
+
+    --------------------
+
+    physics.addBody( self.body, {
+        density = 1000,
+        filter = { categoryBits=2, maskBits=1 }
+    })
+
+    self.body.collision = function(body, event) self:onCollision(event) end
+    self.body:addEventListener( 'collision' )
 end
 
 --------------------------------------------------------------------------------
 
 function Cerise:drag( event )
     if event.phase == 'began' then
-        display.getCurrentStage():setFocus( self.display )
-        self.markY = self.display.y    -- store y location of object
+        display.getCurrentStage():setFocus( self.body )
+        self.markY = self.body.y    -- store y location of object
 
     elseif event.phase == 'moved' then
-        local BOTTOM = display.contentHeight*0.5 - self.display.height * 0.5 - 20;
-        local TOP = - display.contentHeight*0.5 + self.display.height * 0.5 + 60;
+        local BOTTOM = display.contentHeight*0.5 - self.body.height * 0.5 - 20;
+        local TOP = - display.contentHeight*0.5 + self.body.height * 0.5 + 60;
 
         local y = ((event.y - event.yStart) + self.markY)
         if(y > BOTTOM) then
@@ -59,7 +82,7 @@ function Cerise:drag( event )
             y = TOP
         end
 
-        self.display.y = y
+        self.body.y = y
 
     elseif event.phase == 'ended' or event.phase == 'cancelled' then
         display.getCurrentStage():setFocus( nil )

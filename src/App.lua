@@ -60,7 +60,7 @@ function App:ready()
 
     Background:init()
     if(not App.SOUND_OFF) then
-        Sound:playMusic()
+        -- Sound:start()
     end
 
     if(App.VIEW_TESTING) then

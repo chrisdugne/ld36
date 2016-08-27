@@ -21,7 +21,7 @@ function Cerise:onCollision(event)
         local bird = event.other
         local caught = bird:catch()
         if(caught) then
-            Score:increment()
+            Score:increment(bird)
         end
     end
 end
@@ -35,7 +35,7 @@ function Cerise:show()
 
     self.parent:insert(self.body)
 
-    self.body.x = 140 - display.contentWidth * 0.5
+    self.body.x = 190 - display.contentWidth * 0.5
     self.body.y = self.y
     self.body.rotation = self.rotation
 

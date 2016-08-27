@@ -71,8 +71,9 @@ function Score:createBar()
     self.barBG:setFillColor(0)
 
     self:displayTitle()
+    self:refreshLevel()
     self:refreshPoints()
-    self:drawStraight(GLOBALS.levels[App.user.level].reach)
+    self:resetStraight()
     self:showBar()
 end
 
@@ -100,7 +101,7 @@ function Score:displayTitle()
     local text = display.newText(
         self.bar,
         App.game.title,
-        display.contentWidth*0.5 - 195, 0,
+        display.contentWidth*0.5 - 95, 0,
         FONT, 35
     )
 
@@ -121,8 +122,44 @@ function Score:increment(bird)
     self.current.straight = self.current.straight + 1
     self:refreshPoints()
     self:refreshStraight(bird)
+
+    local level = App.game:currentLevel()
+    local toReach = level and level.reach
+    local reached = level and self.current.straight == toReach
+
+    if(reached) then
+        local newLevel = App.user:growLevel()
+        self:resetStraight()
+        self:refreshLevel()
+        Sound:nextStep()
+    end
 end
 
+--------------------------------------------------------------------------------
+-- LEVEL
+--------------------------------------------------------------------------------
+
+function Score:refreshLevel()
+     if(self.level) then
+        display.remove(self.level)
+    end
+
+    self.level = utils.text({
+        parent   = self.bar,
+        value    = 'Level ' .. App.user.level,
+        x        = display.contentWidth*0.5 - 395,
+        y        = 0,
+        font     = FONT,
+        fontSize = 55
+    })
+
+    utils.grow(self.level)
+
+    self.level.anchorX = 0
+end
+
+--------------------------------------------------------------------------------
+-- POINTS
 --------------------------------------------------------------------------------
 
 function Score:refreshPoints()
@@ -145,25 +182,44 @@ function Score:refreshPoints()
 end
 
 --------------------------------------------------------------------------------
+-- STRAIGHT
+--------------------------------------------------------------------------------
 
 function Score:birdPosition(i)
-    local marginLeft = display.contentWidth * 0.06
-    local gap = display.contentWidth * 0.05
+    local marginLeft = display.contentWidth * 0.085
+    local gap = display.contentWidth * 0.03
     return i * gap + marginLeft
 end
 
 function Score:refreshStraight(bird)
-    transition.to(bird, {
-        x    = self:birdPosition(self.current.straight),
-        y    = self.bar.y,
-        time = 350
-    })
+    local itemX = self:birdPosition(self.current.straight) - display.contentWidth * 0.5
+    local birdItem = display.newImage(
+        self.straight,
+        'assets/images/game/item/gem.png',
+        itemX, 0
+    );
+
+    utils.grow(birdItem)
 end
 
-function Score:drawStraight(reach)
+function Score:resetStraight()
+    self.current.straight = 0
+    utils.tprint(GLOBALS.levels)
+    local level = GLOBALS.levels[App.user.level]
+    local reach = level.reach
+
+    utils.tprint(level)
+
+    if(self.straight) then
+        utils.destroyFromDisplay(self.straight)
+    end
+
+    self.straight = display.newGroup()
+    self.bar:insert(self.straight)
+
     for i = 1, reach do
         local bird = display.newImage(
-            self.bar,
+            self.straight,
             'assets/images/game/item/gem.png',
             self:birdPosition(i) - display.contentWidth * 0.5, 0
         );
@@ -171,6 +227,8 @@ function Score:drawStraight(reach)
         bird.fill.effect = 'filter.desaturate'
         bird.fill.effect.intensity = 0.65
     end
+
+    utils.grow(self.straight)
 end
 
 --------------------------------------------------------------------------------

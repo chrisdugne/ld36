@@ -43,7 +43,7 @@ function User:resetLevel()
 end
 
 function User:growLevel()
-    self.level = self.level+1
+    self.level = math.min(self.level+1, #GLOBALS.levels)
     return self.level
 end
 

@@ -3,51 +3,49 @@
 local Sound = {
     isOff = false,
     options = {},
-    channels = {}
+    clicks = {},
+    channels = {},
+    TIMER = 8727
 }
 
 -----------------------------------------------------------------------------------------
 
-local themes = {
-    audio.loadSound('assets/sounds/music/theme-1.mp3'),
-    audio.loadSound('assets/sounds/music/theme-2.mp3')
-}
+local ld = audio.loadSound('assets/sounds/music/ludumdare.mp3')
 
-local rotation   = audio.loadSound('assets/sounds/sfx/room-rotation.mp3')
-local toggleDoor = audio.loadSound('assets/sounds/sfx/toggle-door.mp3')
-local gem        = audio.loadSound('assets/sounds/sfx/gem.mp3')
-local exit       = audio.loadSound('assets/sounds/sfx/exit.mp3')
-
-local room = {
-    appear = audio.loadSound('assets/sounds/sfx/room-appear.mp3'),
-    vanish = audio.loadSound('assets/sounds/sfx/room-vanish.mp3'),
-    tilt   = audio.loadSound('assets/sounds/sfx/room-tilt.mp3')
-}
-
-local gems = {
-    audio.loadSound('assets/sounds/sfx/gem-1.mp3'),
-    audio.loadSound('assets/sounds/sfx/gem-2.mp3'),
-    audio.loadSound('assets/sounds/sfx/gem-3.mp3')
+local steps = {
+    audio.loadSound('assets/sounds/music/step1.mp3'),
+    audio.loadSound('assets/sounds/music/step2.mp3')
 }
 
 -----------------------------------------------------------------------------------------
 
-function Sound:playMusic()
-    self.currentTheme = 0
-    self:nextTheme()
+function Sound:start()
+    self.currentStep = 0
+    self.clicks = {}
+    self.channels.music = audio.play(ld)
+    self:prepareClicks()
 end
 
-function Sound:nextTheme()
-    self.currentTheme = self.currentTheme + 1
-    if(self.currentTheme == (#themes+1)) then self.currentTheme = 1 end
+function Sound:stop()
+    for i=1,1000 do
+        timer.cancel(self.clicks[i])
+    end
+end
 
-    audio.pause(self.channels.music)
+function Sound:prepareClicks()
+    for i=1,1000 do
+        self.clicks[i] = timer.performWithDelay(self.TIMER*i, function ()
+            self:seek(self.TIMER * self.currentStep)
+        end)
+    end
+end
 
-    self.channels.music = audio.play( themes[self.currentTheme], {
-        onComplete = function()
-            self:nextTheme()
-        end,
-    })
+function Sound:nextStep()
+    self.currentStep = self.currentStep + 1
+end
+
+function Sound:seek(time)
+    audio.seek( time, { channel=self.channels.music } )
 end
 
 --------------------------------------------------------------------------------

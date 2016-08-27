@@ -47,6 +47,9 @@ function Game:start()
 
     self:displayTitle()
     self:render()
+
+    Sound:start()
+
     self.state = Game.RUNNING
 end
 
@@ -90,6 +93,7 @@ function Game:stop(userExit)
 
     ------------------------------------------
 
+    Sound:stop()
     Effects:stop(true)
     Camera:stop()
     self.layer1:stop()
@@ -128,9 +132,8 @@ end
 --------------------------------------------------------------------------------
 
 function Game:waitForNextBird()
-    utils.tprint(App.user.level)
-    utils.tprint(GLOBALS.levels, App.user.level)
-    local nextTick = 2400/ GLOBALS.levels[App.user.level].spawn
+    local level = self:currentLevel()
+    local nextTick = Sound.TIMER / level.spawn
     timer.performWithDelay( nextTick , function()
         if(self.state == Game.RUNNING) then
             self:spawnBird()
@@ -142,7 +145,8 @@ function Game:spawnBird()
     local bird = Bird:new({
         parent = Camera,
         x = display.contentWidth * 0.5 - 20,
-        y = math.random(MIN, MAX)
+        y = math.random(MIN, MAX),
+        speed = 10 * self:currentLevel().speed
     })
 
     bird:show()
@@ -150,6 +154,10 @@ function Game:spawnBird()
 end
 
 --------------------------------------------------------------------------------
+
+function Game:currentLevel()
+    return GLOBALS.levels[App.user.level]
+end
 
 function Game:render(next)
     local cerise = Cerise:new()
@@ -163,18 +171,6 @@ end
 --------------------------------------------------------------------------------
 --  API
 --------------------------------------------------------------------------------
-
-function Game:catch()
-    local nextLevel = GLOBALS.levels[App.user.level+1]
-    local toReach = nextLevel and nextLevel.reach
-    local pointsReached = nextLevel and Score.current.straight >= pointsRequired
-
-    if(pointsReached) then
-        local newLevel = App.user:growLevel()
-        HUD:raiseTo(newLevel)
-        Curves:raiseTo(newLevel)
-    end
-end
 
 --------------------------------------------------------------------------------
 

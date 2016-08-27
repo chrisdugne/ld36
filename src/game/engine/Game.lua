@@ -2,6 +2,14 @@
 local physics = require( 'physics' )
 -- physics.setDrawMode( 'hybrid' )
 
+local MIN = - display.contentHeight * 0.5 + 80
+local MAX = display.contentHeight * 0.5 - 30
+
+-- local line1 = display.newLine(-100, MIN, 100, MIN)
+-- Camera:insert(line1)
+-- local line2 = display.newLine(-100, MAX, 100, MAX)
+-- Camera:insert(line2)
+
 --------------------------------------------------------------------------------
 
 Game = {
@@ -119,31 +127,34 @@ end
 
 --------------------------------------------------------------------------------
 
-function Game:render(next)
-    self:renderLevel(function()
-        Effects:restart()
-        if(next) then
-            next()
+function Game:waitForNextBird()
+    timer.performWithDelay( 2400, function()
+        if(self.state == Game.RUNNING) then
+            self:spawnBird()
         end
     end)
 end
 
---------------------------------------------------------------------------------
-
-function Game:renderLevel(next)
-    local cerise = Cerise:new()
-    cerise:show()
-
-    self.layer1 = Layer1:new()
-    self.layer1:start()
-
+function Game:spawnBird()
     local bird = Bird:new({
-        parent = self.layer1.display
+        parent = Camera,
+        x = display.contentWidth * 0.5,
+        y = math.random(MIN, MAX)
     })
 
     bird:show()
+    self:waitForNextBird()
+end
 
-    next()
+--------------------------------------------------------------------------------
+
+function Game:render(next)
+    local cerise = Cerise:new()
+    cerise:show()
+
+    self:spawnBird()
+
+    Effects:restart()
 end
 
 --------------------------------------------------------------------------------

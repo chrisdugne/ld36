@@ -6,6 +6,7 @@ local Bird = {}
 
 function Bird:new(options)
     local bird = _.extend({
+        speed = 10
     }, options);
 
     setmetatable(bird, { __index = Bird })
@@ -24,6 +25,17 @@ function Bird:show()
 
     self.display.x = self.x
     self.display.y = self.y
+
+    local function move(event)
+        self.display.x = self.display.x - self.speed
+
+        if(self.display.x < - display.contentWidth) then
+            Runtime:removeEventListener( 'enterFrame', move )
+            utils.destroyFromDisplay(self.display)
+        end
+    end
+
+    Runtime:addEventListener( 'enterFrame', move )
 end
 
 --------------------------------------------------------------------------------

@@ -30,7 +30,6 @@ Effects             = require 'src.game.engine.Effects'
 Touch               = require 'src.game.engine.TouchController'
 Score               = require 'src.game.engine.Score'
 Sound               = require 'src.game.engine.Sound'
-Layer1              = require 'src.game.engine.Layer1'
 
 -- gui components
 GUI                 = require 'src.components.GUI'

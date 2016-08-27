@@ -47,7 +47,6 @@ function Cerise:drag( event )
     if event.phase == 'began' then
         display.getCurrentStage():setFocus( self.display )
         self.markY = self.display.y    -- store y location of object
-        App.game:stop()
 
     elseif event.phase == 'moved' then
         local BOTTOM = display.contentHeight*0.5 - self.display.height * 0.5 - 20;

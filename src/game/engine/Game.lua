@@ -146,7 +146,8 @@ function Game:spawnBird()
         parent = Camera,
         x = display.contentWidth * 0.5 - 20,
         y = math.random(MIN, MAX),
-        speed = 10 * self:currentLevel().speed
+        speed = 10 * self:currentLevel().speed,
+        type = math.random(1, BAD_BIRD)
     })
 
     bird:show()

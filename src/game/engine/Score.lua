@@ -19,7 +19,7 @@ function Score:reset()
         straight = 0,
         points = 0
     }
-
+    
     self.enhancement = nil
     self.latest      = nil
 end
@@ -118,20 +118,24 @@ end
 --------------------------------------------------------------------------------
 
 function Score:increment(bird)
-    self.current.points = self.current.points + App.user.level
-    self.current.straight = self.current.straight + 1
-    self:refreshPoints()
-    self:refreshStraight(bird)
+    if(bird.type ~= BAD_BIRD) then
+        self.current.points = self.current.points + App.user.level
+        self:refreshPoints()
+        self.current.straight = self.current.straight + 1
+        self:refreshStraight(bird)
 
-    local level = App.game:currentLevel()
-    local toReach = level and level.reach
-    local reached = level and self.current.straight == toReach
+        local level = App.game:currentLevel()
+        local toReach = level and level.reach
+        local reached = level and self.current.straight == toReach
 
-    if(reached) then
-        local newLevel = App.user:growLevel()
+        if(reached) then
+            App.user:growLevel()
+            Sound:nextStep()
+            self:refreshLevel()
+            self:resetStraight()
+        end
+    else
         self:resetStraight()
-        self:refreshLevel()
-        Sound:nextStep()
     end
 end
 
@@ -192,10 +196,15 @@ function Score:birdPosition(i)
 end
 
 function Score:refreshStraight(bird)
+    local num = 1
+    if(bird.type == BAD_BIRD) then
+        num = 2
+    end
+
     local itemX = self:birdPosition(self.current.straight) - display.contentWidth * 0.5
     local birdItem = display.newImage(
         self.straight,
-        'assets/images/game/item/gem.png',
+        'assets/images/game/item/gem.' .. num .. '.png',
         itemX, 0
     );
 
@@ -204,11 +213,8 @@ end
 
 function Score:resetStraight()
     self.current.straight = 0
-    utils.tprint(GLOBALS.levels)
     local level = GLOBALS.levels[App.user.level]
     local reach = level.reach
-
-    utils.tprint(level)
 
     if(self.straight) then
         utils.destroyFromDisplay(self.straight)
@@ -220,7 +226,7 @@ function Score:resetStraight()
     for i = 1, reach do
         local bird = display.newImage(
             self.straight,
-            'assets/images/game/item/gem.png',
+            'assets/images/game/item/gem.1.png',
             self:birdPosition(i) - display.contentWidth * 0.5, 0
         );
 

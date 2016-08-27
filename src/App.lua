@@ -97,6 +97,7 @@ function App:setup()
     ----------------------------------------------------------------------------
     ---- App globals
 
+    BAD_BIRD = 5
     GLOBALS = {
         savedData = utils.loadUserData('savedData.json'),
         options   = utils.loadUserData('options.json'),

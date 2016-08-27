@@ -17,8 +17,13 @@ end
 --------------------------------------------------------------------------------
 
 function Bird:show()
+    local num = 1
+    if(self.type == BAD_BIRD) then
+        num = 2
+    end
+
     self.body = _.extend(display.newImage(
-        'assets/images/game/avatars/profile.1.png'
+        'assets/images/game/birds/bird.'.. num .. '.png'
     ), self)
 
     self.body.catch = function(event)
@@ -69,3 +74,4 @@ end
 --------------------------------------------------------------------------------
 
 return Bird
+

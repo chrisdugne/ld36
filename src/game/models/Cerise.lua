@@ -30,7 +30,7 @@ end
 
 function Cerise:show()
     self.body = _.extend(display.newImage(
-        'assets/images/game/avatars/profile.1.png'
+        'assets/images/game/cerise.png'
     ), self)
 
     self.parent:insert(self.body)
@@ -60,6 +60,7 @@ function Cerise:show()
 
     physics.addBody( self.body, {
         density = 1000,
+        radius = 80,
         filter = { categoryBits=2, maskBits=1 }
     })
 

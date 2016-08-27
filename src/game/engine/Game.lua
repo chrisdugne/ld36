@@ -137,7 +137,7 @@ end
 function Game:spawnBird()
     local bird = Bird:new({
         parent = Camera,
-        x = display.contentWidth * 0.5,
+        x = display.contentWidth * 0.5 - 20,
         y = math.random(MIN, MAX)
     })
 

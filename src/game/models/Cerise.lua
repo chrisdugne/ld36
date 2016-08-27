@@ -17,9 +17,12 @@ end
 --------------------------------------------------------------------------------
 
 function Cerise:onCollision(event)
-    if(event.phase == 'ended') then
+    if(event.phase == 'began') then
         local bird = event.other
-        utils.tprint('hit a bird')
+        local caught = bird:catch()
+        if(caught) then
+            Score:increment(1)
+        end
     end
 end
 

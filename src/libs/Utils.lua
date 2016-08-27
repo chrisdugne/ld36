@@ -570,6 +570,18 @@ function easeDisplay(object, scale)
     })
 end
 
+function grow(object, fromScale, time)
+    object.xScale = fromScale or 0.6
+    object.yScale = fromScale or 0.6
+
+    transition.to( object, {
+        xScale = 1,
+        yScale = 1,
+        time = time or 350,
+        transition = easing.outBounce
+    })
+end
+
 function bounce(object, scale)
     local scaleTo = scale or 1
 

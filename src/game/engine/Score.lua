@@ -16,7 +16,7 @@ end
 
 function Score:reset()
     self.current = {
-        gems = 0
+        points = 0
     }
 
     self.enhancement = nil
@@ -25,17 +25,17 @@ end
 
 function Score:worst()
     return {
-        gems = 0
+        points = 0
     }
 end
 
 function Score:enhance(previousScore)
     self.merge = {
-        gems = math.max(self.current.gems, previousScore.gems)
+        points = math.max(self.current.points, previousScore.points)
     }
 
     self.enhancement = {
-        gems = self.current.gems > previousScore.gems
+        points = self.current.points > previousScore.points
     }
 
     return self.merge
@@ -69,11 +69,8 @@ function Score:createBar()
     self.barBG.alpha = 0
     self.barBG:setFillColor(0)
 
-    -- if(not App.user:isNew()) then
-        self:displayButtons()
-    -- end
-
     self:displayTitle()
+    self:refreshPoints()
     self:showBar()
 end
 
@@ -115,6 +112,31 @@ function Score:displayTitle()
     })
 end
 
+--------------------------------------------------------------------------------
+
+function Score:increment(points)
+    self.current.points = self.current.points + points
+    self:refreshPoints()
+end
+
+function Score:refreshPoints()
+    if(self.count) then
+        display.remove(self.count)
+    end
+
+    self.count = utils.text({
+        parent   = self.bar,
+        value    = self.current.points,
+        x        = 30 - display.contentWidth * 0.5,
+        y        = 0,
+        font     = FONT,
+        fontSize = 55
+    })
+
+    utils.grow(self.count)
+
+    self.count.anchorX = 0
+end
 
 --------------------------------------------------------------------------------
 
@@ -185,7 +207,7 @@ function Score:display()
         })
     end
 
-    if(self.current.gems > 0) then
+    if(self.current.points > 0) then
         self:bounceWonGem(board, 1)
     end
 

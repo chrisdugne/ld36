@@ -62,31 +62,5 @@ function Camera:start(options)
 end
 
 --------------------------------------------------------------------------------
----
--- Note to help understand the bounds reaching:
---    camera.display[0,0] is the top left point of the screen
---
-function Camera:dragScreen( event )
-    if event.phase == 'began' then
-        display.getCurrentStage():setFocus( App.display )
-        self.markX = self.display.x    -- store x location of object
-        self.markY = self.display.y    -- store y location of object
-
-    elseif event.phase == 'moved' then
-
-        local x = ((event.x - event.xStart) + self.markX)
-        local y = ((event.y - event.yStart) + self.markY)
-
-        self.display.x = x
-        self.display.y = y
-
-    elseif event.phase == 'ended' or event.phase == 'cancelled' then
-        display.getCurrentStage():setFocus( nil )
-    end
-
-    return false
-end
-
---------------------------------------------------------------------------------
 
 return Camera

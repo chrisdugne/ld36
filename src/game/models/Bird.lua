@@ -6,7 +6,8 @@ local Bird = {}
 
 function Bird:new(options)
     local bird = _.extend({
-        speed = 21
+        caught = false,
+        speed = 12
     }, options);
 
     setmetatable(bird, { __index = Bird })
@@ -15,31 +16,35 @@ end
 
 --------------------------------------------------------------------------------
 
-function Bird:onCollision(event)
-    local other = event.other
-    self:caught()
-end
-
---------------------------------------------------------------------------------
-
 function Bird:show()
-    self.display = display.newImage(
+    self.body = _.extend(display.newImage(
         'assets/images/game/avatars/profile.1.png'
-    )
+    ), self)
 
-    self.parent:insert(self.display)
+    self.body.catch = function(event)
+        if(not self.caught) then
+            self.caught = true;
+            self:destroy()
+            return true
+        end
 
-    self.display.x = self.x
-    self.display.y = self.y
+        return false
+    end
+
+    self.parent:insert(self.body)
+
+    self.body.x = self.x
+    self.body.y = self.y
+    utils.grow(self.body)
 
     self.move = function (event)
-        if(self.display.x == nil) then
+        if(self.body.x == nil) then
             Runtime:removeEventListener( 'enterFrame', self.move )
         else
-            if(self.display.x < - display.contentWidth) then
+            if(self.body.x < - display.contentWidth) then
                 self:destroy()
             end
-            self.display.x = self.display.x - self.speed
+            self.body.x = self.body.x - self.speed
         end
     end
 
@@ -47,26 +52,18 @@ function Bird:show()
 
     ------------
 
-    physics.addBody( self.display, {
+    physics.addBody( self.body, {
         density  = 0,
-        bounce   = 131,
         radius   = self.radius,
         filter = { categoryBits=1, maskBits=2 }
     })
-
-    self.display.collision = function(display, event) self:onCollision(event) end
-    self.display:addEventListener( 'collision' )
 end
 
 --------------------------------------------------------------------------------
 
 function Bird:destroy()
     Runtime:removeEventListener( 'enterFrame', self.move )
-    utils.destroyFromDisplay(self.display, true)
-end
-
-function Bird:caught(event)
-    self:destroy()
+    utils.destroyFromDisplay(self.body, true)
 end
 
 --------------------------------------------------------------------------------

@@ -99,7 +99,8 @@ function App:setup()
 
     GLOBALS = {
         savedData = utils.loadUserData('savedData.json'),
-        options   = utils.loadUserData('options.json')
+        options   = utils.loadUserData('options.json'),
+        levels    = utils.loadFile('assets/levels.json')
     }
 
     ----------------------------------------------------------------------------

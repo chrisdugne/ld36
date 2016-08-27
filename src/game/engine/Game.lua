@@ -56,6 +56,7 @@ function Game:reset()
     Camera:empty()
     HUD:reset()
     self:resetContent()
+    App.user:resetLevel()
 
     Score:reset()
 end
@@ -63,7 +64,7 @@ end
 function Game:resetContent()
     -- here you can reset your content
     -- utils.emptyTable(self.stuff)
-    self.title = 'New Game'
+    self.title = 'LD36'
 end
 
 ------------------------------------------
@@ -127,7 +128,10 @@ end
 --------------------------------------------------------------------------------
 
 function Game:waitForNextBird()
-    timer.performWithDelay( 2400, function()
+    utils.tprint(App.user.level)
+    utils.tprint(GLOBALS.levels, App.user.level)
+    local nextTick = 2400/ GLOBALS.levels[App.user.level].spawn
+    timer.performWithDelay( nextTick , function()
         if(self.state == Game.RUNNING) then
             self:spawnBird()
         end
@@ -159,6 +163,18 @@ end
 --------------------------------------------------------------------------------
 --  API
 --------------------------------------------------------------------------------
+
+function Game:catch()
+    local nextLevel = GLOBALS.levels[App.user.level+1]
+    local toReach = nextLevel and nextLevel.reach
+    local pointsReached = nextLevel and Score.current.straight >= pointsRequired
+
+    if(pointsReached) then
+        local newLevel = App.user:growLevel()
+        HUD:raiseTo(newLevel)
+        Curves:raiseTo(newLevel)
+    end
+end
 
 --------------------------------------------------------------------------------
 

@@ -1,0 +1,17 @@
+[
+    {
+        "reach": 4,
+        "spawn": 4,
+        "speed": 1
+    },
+    {
+        "reach": 4,
+        "spawn": 1,
+        "speed": 2
+    },
+    {
+        "reach": 8,
+        "spawn": 1,
+        "speed": 2
+    }
+]

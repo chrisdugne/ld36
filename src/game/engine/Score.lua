@@ -16,6 +16,7 @@ end
 
 function Score:reset()
     self.current = {
+        straight = 0,
         points = 0
     }
 
@@ -71,6 +72,7 @@ function Score:createBar()
 
     self:displayTitle()
     self:refreshPoints()
+    self:drawStraight(GLOBALS.levels[App.user.level].reach)
     self:showBar()
 end
 
@@ -114,10 +116,14 @@ end
 
 --------------------------------------------------------------------------------
 
-function Score:increment(points)
-    self.current.points = self.current.points + points
+function Score:increment(bird)
+    self.current.points = self.current.points + App.user.level
+    self.current.straight = self.current.straight + 1
     self:refreshPoints()
+    self:refreshStraight(bird)
 end
+
+--------------------------------------------------------------------------------
 
 function Score:refreshPoints()
     if(self.count) then
@@ -136,6 +142,35 @@ function Score:refreshPoints()
     utils.grow(self.count)
 
     self.count.anchorX = 0
+end
+
+--------------------------------------------------------------------------------
+
+function Score:birdPosition(i)
+    local marginLeft = display.contentWidth * 0.06
+    local gap = display.contentWidth * 0.05
+    return i * gap + marginLeft
+end
+
+function Score:refreshStraight(bird)
+    transition.to(bird, {
+        x    = self:birdPosition(self.current.straight),
+        y    = self.bar.y,
+        time = 350
+    })
+end
+
+function Score:drawStraight(reach)
+    for i = 1, reach do
+        local bird = display.newImage(
+            self.bar,
+            'assets/images/game/item/gem.png',
+            self:birdPosition(i) - display.contentWidth * 0.5, 0
+        );
+
+        bird.fill.effect = 'filter.desaturate'
+        bird.fill.effect.intensity = 0.65
+    end
 end
 
 --------------------------------------------------------------------------------

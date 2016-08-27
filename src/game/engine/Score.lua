@@ -140,9 +140,6 @@ end
 --------------------------------------------------------------------------------
 
 function Score:calculate(chapter, level)
-    local previousScore = App.user:previousScore(chapter, level)
-    local newScore      = self:enhance(previousScore)
-    App.user:recordLevel ( chapter, level, newScore )
 end
 
 --------------------------------------------------------------------------------

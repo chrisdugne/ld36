@@ -1,3 +1,7 @@
+
+local physics = require( 'physics' )
+-- physics.setDrawMode( 'hybrid' )
+
 --------------------------------------------------------------------------------
 
 Game = {
@@ -23,6 +27,9 @@ end
 
 function Game:start()
     self:reset()
+
+    physics.start()
+    physics.setGravity( 0,0 )
 
     Camera:resetZoom()
     Camera:center()
@@ -77,6 +84,7 @@ function Game:stop(userExit)
 
     Effects:stop(true)
     Camera:stop()
+    self.layer1:stop()
 end
 
 --------------------------------------------------------------------------------
@@ -111,8 +119,6 @@ end
 
 --------------------------------------------------------------------------------
 
--- you may perform extra loading/setup after the level is rendered using
--- the next function
 function Game:render(next)
     self:renderLevel(function()
         Effects:restart()
@@ -125,49 +131,25 @@ end
 --------------------------------------------------------------------------------
 
 function Game:renderLevel(next)
-    -- READ what you've created in LevelDrawer
     local cerise = Cerise:new()
     cerise:show()
+
+    self.layer1 = Layer1:new()
+    self.layer1:start()
+
+    local bird = Bird:new({
+        parent = self.layer1.display
+    })
+
+    bird:show()
+
     next()
 end
 
 --------------------------------------------------------------------------------
 --  API
 --------------------------------------------------------------------------------
--- you may manipulate your game overall status
--- and modify every concerned models here
-
--- function Game:toggleStuff()
---     for model in self.stuff:findModels() do
---         model:anyThing()
---     end
--- end
 
 --------------------------------------------------------------------------------
-
-
---------------------------------------------------------------------------------
-
-function analyticsLoadLevel(chapter, level)
-    local user = User.profile.analytics
-
-    if(not user[chapter]) then
-        user[chapter] = {}
-    end
-
-    if(not user[chapter][level]) then
-        user[chapter][level] = { tries = 0 }
-    end
-
-    local tries = user[chapter][level].tries
-    user[chapter][level].tries = tries + 1
-
-    if(chapter == 0) then
-        analytics.event('tutorial', 'step', '1')
-    else
-        local value = chapter .. ':' .. level .. ':' .. tries
-        analytics.event('game', 'load-level', value)
-    end
-end
 
 return Game

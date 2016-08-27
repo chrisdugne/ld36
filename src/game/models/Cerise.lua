@@ -6,7 +6,8 @@ local Cerise = {}
 
 function Cerise:new(options)
     local cerise = _.extend({
-        rotation = 0
+        rotation = 0,
+        parent = Camera
     }, options);
 
     setmetatable(cerise, { __index = Cerise })
@@ -20,7 +21,7 @@ function Cerise:show()
         'assets/images/game/avatars/profile.1.png'
     )
 
-    Camera:insert(self.display)
+    self.parent:insert(self.display)
 
     self.display.x = 140 - display.contentWidth * 0.5
     self.display.y = self.y
@@ -46,6 +47,7 @@ function Cerise:drag( event )
     if event.phase == 'began' then
         display.getCurrentStage():setFocus( self.display )
         self.markY = self.display.y    -- store y location of object
+        App.game:stop()
 
     elseif event.phase == 'moved' then
         local BOTTOM = display.contentHeight*0.5 - self.display.height * 0.5 - 20;

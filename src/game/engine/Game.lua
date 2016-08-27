@@ -126,8 +126,8 @@ end
 
 function Game:renderLevel(next)
     -- READ what you've created in LevelDrawer
-    local item = Item:new()
-    item:show()
+    local cerise = Cerise:new()
+    cerise:show()
     next()
 end
 

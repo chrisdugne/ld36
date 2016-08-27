@@ -46,7 +46,7 @@ Focus               = require 'src.components.Focus'
 --------------------------------------------------------------------------------
 ---- Models
 
-Item                = require 'src.game.models.Item'
+Cerise              = require 'src.game.models.Cerise'
 
 --------------------------------------------------------------------------------
 

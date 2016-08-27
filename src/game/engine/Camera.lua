@@ -24,7 +24,7 @@ end
 --------------------------------------------------------------------------------
 
 function Camera:resetZoom()
-    self.zoom = App:adaptToRatio(0.45)
+    self.zoom = 1
 end
 
 --------------------------------------------------------------------------------
@@ -49,16 +49,9 @@ function Camera:start(options)
     transition.cancel(self.display)
     self.display.alpha = 1
 
-    local listen = function(event)
-        self:dragScreen(event)
-    end
-
-    App.display:addEventListener( 'touch', listen)
     App.hud:toFront()
 
     function Camera:stop()
-        App.display:removeEventListener( 'touch', listen)
-
         transition.to (self.display, {
             alpha = 0,
             time = 500,

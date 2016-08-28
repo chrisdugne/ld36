@@ -161,6 +161,21 @@ function Game:currentLevel()
 end
 
 function Game:render(next)
+    utils.emptyGroup(self.bg)
+    self.bg = display.newGroup()
+    self.bg.mist1 = display.newImageRect( self.bg, "assets/images/game/bg/bg1.png", display.contentWidth, display.contentHeight)
+    self.bg.mist1.x = 0
+    self.bg.mist1.y = 0
+    self.bg.mist1.alpha = 0.7
+
+    self.bg.mist2 = display.newImageRect( self.bg, "assets/images/game/bg/bg1.png", display.contentWidth, display.contentHeight)
+    self.bg.mist2.x = display.contentWidth
+    self.bg.mist2.y = 0
+    self.bg.mist2.alpha = 0.7
+
+    self:moveMists()
+    Camera:insert(self.bg)
+
     local cerise = Cerise:new()
     cerise:show()
 
@@ -168,6 +183,25 @@ function Game:render(next)
 
     Effects:restart()
 end
+
+function Game:moveMists()
+    if(self.bg.mist1) then
+        transition.cancel(self.bg.mist1)
+        transition.cancel(self.bg.mist2)
+    end
+
+    transition.to( self.bg.mist2, { time=60000, x=0, onComplete= function ()
+        self:replaceMists()
+    end})
+    transition.to( self.bg.mist1, { time=60000, x=-display.contentWidth })
+end
+
+function Game:replaceMists()
+    self.bg.mist1.x = 0
+    self.bg.mist2.x = display.contentWidth
+    self:moveMists()
+end
+
 
 --------------------------------------------------------------------------------
 --  API

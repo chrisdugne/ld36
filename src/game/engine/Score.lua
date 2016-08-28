@@ -19,7 +19,7 @@ function Score:reset()
         straight = 0,
         points = 0
     }
-    
+
     self.enhancement = nil
     self.latest      = nil
 end
@@ -232,7 +232,7 @@ function Score:resetStraight()
         );
 
         bird.fill.effect = 'filter.desaturate'
-        bird.fill.effect.intensity = 0.65
+        bird.fill.effect.intensity = 1
     end
 
     utils.grow(self.straight)

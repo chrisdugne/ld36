@@ -13,16 +13,16 @@ local Sound = {
 local ld = audio.loadSound('assets/sounds/music/ludumdare.mp3')
 
 local boos = {
-    audio.loadSound('assets/sounds/music/boo1.wav'),
-    audio.loadSound('assets/sounds/music/boo2.wav'),
-    audio.loadSound('assets/sounds/music/boo3.wav')
+    audio.loadSound('assets/sounds/music/boo1.mp3'),
+    audio.loadSound('assets/sounds/music/boo2.mp3'),
+    audio.loadSound('assets/sounds/music/boo3.mp3')
 }
 
 local yeahs = {
-    audio.loadSound('assets/sounds/music/yeah1.wav'),
-    audio.loadSound('assets/sounds/music/yeah2.wav'),
-    audio.loadSound('assets/sounds/music/yeah4.wav'),
-    audio.loadSound('assets/sounds/music/yeah3.wav')
+    audio.loadSound('assets/sounds/music/yeah1.mp3'),
+    audio.loadSound('assets/sounds/music/yeah2.mp3'),
+    audio.loadSound('assets/sounds/music/yeah4.mp3'),
+    audio.loadSound('assets/sounds/music/yeah3.mp3')
 }
 
 -----------------------------------------------------------------------------------------

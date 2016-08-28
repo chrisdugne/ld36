@@ -60,7 +60,7 @@ function Cerise:show()
 
     physics.addBody( self.body, {
         density = 1000,
-        radius = 80,
+        radius = 45,
         filter = { categoryBits=2, maskBits=1 }
     })
 

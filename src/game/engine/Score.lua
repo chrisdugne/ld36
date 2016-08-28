@@ -135,6 +135,7 @@ function Score:increment(bird)
             self:resetStraight()
         end
     else
+        Sound:playBoo()
         self:resetStraight()
     end
 end

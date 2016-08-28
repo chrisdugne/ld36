@@ -12,9 +12,17 @@ local Sound = {
 
 local ld = audio.loadSound('assets/sounds/music/ludumdare.mp3')
 
-local steps = {
-    audio.loadSound('assets/sounds/music/step1.mp3'),
-    audio.loadSound('assets/sounds/music/step2.mp3')
+local boos = {
+    audio.loadSound('assets/sounds/music/boo1.wav'),
+    audio.loadSound('assets/sounds/music/boo2.wav'),
+    audio.loadSound('assets/sounds/music/boo3.wav')
+}
+
+local yeahs = {
+    audio.loadSound('assets/sounds/music/yeah1.wav'),
+    audio.loadSound('assets/sounds/music/yeah2.wav'),
+    audio.loadSound('assets/sounds/music/yeah4.wav'),
+    audio.loadSound('assets/sounds/music/yeah3.wav')
 }
 
 -----------------------------------------------------------------------------------------
@@ -42,6 +50,7 @@ end
 
 function Sound:nextStep()
     self.currentStep = self.currentStep + 1
+    self:playYeah()
 end
 
 function Sound:seek(time)
@@ -104,40 +113,12 @@ end
 
 --------------------------------------------------------------------------------
 
-function Sound:playRotation()
-    self:effect( rotation )
+function Sound:playBoo()
+    self:effect( boos[math.random(1,#boos)], 0.4 )
 end
 
-function Sound:playButton()
-    self:playRotation()
-end
-
-function Sound:playToggleDoor()
-    self:effect( toggleDoor )
-end
-
-function Sound:playGem()
-    self:effect( gem )
-end
-
-function Sound:playExit()
-    self:effect( exit )
-end
-
-function Sound:playAppear()
-    self:effect( room.appear)
-end
-
-function Sound:playVanish()
-    self:effect( room.vanish )
-end
-
-function Sound:playTilt()
-    self:effect( room.tilt )
-end
-
-function Sound:playFinalGem(num)
-    self:effect( gems[num] )
+function Sound:playYeah()
+    self:effect( yeahs[math.random(1,#yeahs)], 0.5 )
 end
 
 -----------------------------------------------------------------------------------------

@@ -7,8 +7,8 @@
     },
     {
         "--------------------" : "   Level 2",
-        "spawn": 4,
-        "perTick": 4,
+        "spawn": 7,
+        "perTick": 8,
         "speed": 1
     },
     {
@@ -25,14 +25,14 @@
     },
     {
         "--------------------" : "   Level 5",
-        "spawn": 8,
-        "perTick": 8,
-        "speed": 1
+        "spawn": 15,
+        "perTick": 16,
+        "speed": 1.5
     },
     {
         "--------------------" : "   Level 6",
-        "spawn": 8,
-        "perTick": 8,
+        "spawn": 15,
+        "perTick": 16,
         "speed": 2
     },
     {

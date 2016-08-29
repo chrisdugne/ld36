@@ -32,6 +32,7 @@ local yeahs = {
 
 function Sound:start()
     self.channels.music = audio.play(ld)
+    audio.seek(  (App.user.level-1) * Sound.TIMER, { channel=music } )
 end
 
 function Sound:stop()
@@ -39,7 +40,6 @@ end
 
 function Sound:nextStep()
     self:playYeah()
-    self:startTransition()
 end
 
 function Sound:rewind(level, next)
@@ -129,7 +129,7 @@ function Sound:playBip()
 end
 
 function Sound:playYeah()
-    self:effect( yeahs[math.random(1,#yeahs)], 0.5 )
+    self:effect( yeahs[math.random(1,#yeahs)], 0.35 )
 end
 
 -----------------------------------------------------------------------------------------

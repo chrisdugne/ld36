@@ -126,8 +126,7 @@ function Score:increment(bird)
         Sound:playBip()
 
         local level = App.game:currentLevel()
-        local toReach = level and level.reach
-        local reached = level and self.current.straight == toReach
+        local reached = level and self.current.straight == level.spawn
 
         if(reached) then
             Sound:nextStep()

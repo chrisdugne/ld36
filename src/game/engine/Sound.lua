@@ -20,7 +20,11 @@ local boos = {
 
 local bips = {
     audio.loadSound('assets/sounds/sfx/bip1.mp3'),
-    audio.loadSound('assets/sounds/sfx/bip2.mp3')
+    audio.loadSound('assets/sounds/sfx/bip2.mp3'),
+    audio.loadSound('assets/sounds/sfx/bip3.mp3'),
+    audio.loadSound('assets/sounds/sfx/bip4.mp3'),
+    audio.loadSound('assets/sounds/sfx/bip5.mp3'),
+    audio.loadSound('assets/sounds/sfx/bip6.mp3')
 }
 
 local yeahs = {

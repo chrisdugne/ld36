@@ -48,7 +48,9 @@ function Bird:show()
         else
             if(self.body.x < - display.contentWidth * 0.5) then
                 self:explode()
-                App.game:resetWave()
+                if(self.type == GOOD_BIRD) then
+                    App.game:resetWave()
+                end
             end
             self.body.x = self.body.x - self.speed
         end

@@ -17,6 +17,7 @@ end
 function Score:reset()
     self.current = {
         straight = 0,
+        lives = 5,
         points = 0
     }
 
@@ -70,9 +71,11 @@ function Score:createBar()
     self.barBG.alpha = 0
     self.barBG:setFillColor(0)
 
-    self:displayTitle()
+    -- self:displayTitle()
+    self:createProgressBar()
     self:refreshLevel()
     self:refreshPoints()
+    self:refreshLives()
     self:resetStraight()
     self:showBar()
 end
@@ -137,6 +140,30 @@ function Score:increment(bird)
 end
 
 --------------------------------------------------------------------------------
+-- PROGRESS BAR
+--------------------------------------------------------------------------------
+
+function Score:refreshProgressBar(percentage)
+    self.lifeBar:reach({
+        value = percentage,
+        text = ''
+    })
+end
+
+function Score:createProgressBar()
+    self.lifeBar = ProgressBar:new()
+    self.lifeBar:draw({
+        parent = self.bar,
+        x = display.contentWidth*0.5 - 300,
+        y = 50,
+        width = 400,
+        height = 25
+    })
+
+    self:refreshProgressBar( 0)
+end
+
+--------------------------------------------------------------------------------
 -- LEVEL
 --------------------------------------------------------------------------------
 
@@ -155,6 +182,13 @@ function Score:refreshLevel()
     })
 
     utils.grow(self.level)
+    if(App.user.level > 1) then
+        self:refreshProgressBar( App.user.level / #GLOBALS.levels * 100)
+    else
+        self:refreshProgressBar( 0)
+    end
+
+    utils.grow(self.lifeBar)
 
     self.level.anchorX = 0
 end
@@ -235,6 +269,47 @@ function Score:resetStraight()
 end
 
 --------------------------------------------------------------------------------
+-- LIVES
+--------------------------------------------------------------------------------
+
+function Score:loseLife()
+    self.current.lives = self.current.lives - 1
+
+    if(self.current.lives == 0) then
+        self.current.lives = 5
+    end
+    self:refreshLives()
+    -- if(self.current.lives == 0) then
+    --     App.game:stop()
+    -- end
+end
+
+function Score:lifePosition(i)
+    local marginLeft = display.contentWidth * 0.65
+    local gap = display.contentWidth * 0.03
+    return i * gap + marginLeft
+end
+
+function Score:refreshLives()
+    if(self.lives) then
+        utils.destroyFromDisplay(self.lives)
+    end
+
+    self.lives = display.newGroup()
+    self.bar:insert(self.lives)
+
+    for i = 1, self.current.lives do
+        local life = display.newImage(
+            self.lives,
+            'assets/images/gui/items/heart.png',
+            self:lifePosition(i) - display.contentWidth * 0.5, 90
+        );
+    end
+
+    utils.grow(self.lives)
+end
+
+--------------------------------------------------------------------------------
 
 function Score:showBar()
     transition.to( self.bar, {
@@ -280,7 +355,7 @@ function Score:display()
         y      = 0
     })
 
-    local title = 'Game Over'
+    local title = self.current.points .. ' pts'
 
     Banner:large({
         parent   = board,
@@ -293,19 +368,6 @@ function Score:display()
     })
 
     self:addBoardButtons(board)
-
-    self.boardGems = {}
-    for i = 1,3 do
-        self.boardGems[i] = self:boardGem({
-            parent = board,
-            num    = i,
-            caught = false
-        })
-    end
-
-    if(self.current.points > 0) then
-        self:bounceWonGem(board, 1)
-    end
 
     utils.easeDisplay(board)
 end
@@ -372,7 +434,7 @@ function Score:addBoardButtons(board)
     Button:icon({
         parent = board,
         type   = 'restart',
-        x      = -board.width * 0.25,
+        x      = 0,
         y      = board.height * 0.45,
         bounce = true,
         action = function()
@@ -381,38 +443,6 @@ function Score:addBoardButtons(board)
             analytics.event('score-screen', 'restart')
             --------------
             Router:open(Router.PLAYGROUND)
-        end
-    })
-
-    Button:icon({
-        parent = board,
-        type   = 'chapters',
-        x      = 0,
-        y      = board.height * 0.45,
-        bounce = true,
-        action = function()
-            ---- analytics
-            analytics.event('score-screen', 'level-selection')
-            --------------
-            Router:open(Router.LEVEL_SELECTION)
-        end
-    })
-
-    Button:icon({
-        parent = board,
-        type   = 'play',
-        x      = board.width * 0.25,
-        y      = board.height * 0.45,
-        bounce = true,
-        action = function()
-            if(User:justFinishedTutorial()) then
-                ---- analytics
-                analytics.event('score-screen', 'next', 'after-tutorial')
-                --------------
-                Router:open(Router.LEVEL_SELECTION)
-            else
-                Router:open(Router.HOME)
-            end
         end
     })
 end

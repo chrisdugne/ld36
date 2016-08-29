@@ -34,6 +34,7 @@ end
 
 function Game:start()
     self:reset()
+    self.state = Game.RUNNING
 
     physics.start()
     physics.setGravity( 0,0 )
@@ -49,8 +50,6 @@ function Game:start()
     self:render()
 
     Sound:start()
-
-    self.state = Game.RUNNING
 end
 
 ------------------------------------------
@@ -69,6 +68,8 @@ function Game:resetContent()
     -- here you can reset your content
     -- utils.emptyTable(self.stuff)
     self.title = 'LD36'
+    self.futurBirds = {};
+    self.birds = {};
 end
 
 ------------------------------------------
@@ -97,7 +98,22 @@ function Game:stop(userExit)
     Sound:stop()
     Effects:stop(true)
     Camera:stop()
-    self.layer1:stop()
+
+    self:destoyBirds()
+end
+
+--------------------------------------------------------------------------------
+
+function Game:destoyBirds()
+    timer.cancel(self.waveChecker)
+
+    for i=1,#self.futurBirds do
+        timer.cancel(self.futurBirds[i])
+    end
+
+    for i=#self.birds, 1, -1 do
+        self.birds[i]:explode()
+    end
 end
 
 --------------------------------------------------------------------------------
@@ -134,24 +150,23 @@ end
 
 function Game:resetWave()
     App.score:resetStraight()
+    App.score:loseLife()
     Camera:shake()
 
     Sound:rewind(App.user.level, function()
         self:startWave()
     end)
 
-    for i=1,#self.futurBirds do
-        timer.cancel(self.futurBirds[i])
-        timer.cancel(self.waveChecker)
-    end
-
-
-    for i=#self.birds, 1, -1 do
-        self.birds[i]:explode()
-    end
+    self:destoyBirds()
 end
 
 function Game:startWave()
+    print('startWave')
+    if(self.state == Game.STOPPED) then
+        print('wave cancelled')
+        return
+    end
+
     local level = self:currentLevel()
     local levelTick = Sound.TIMER / level.perTick
     local nb = level.spawn

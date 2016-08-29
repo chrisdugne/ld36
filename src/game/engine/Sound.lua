@@ -11,6 +11,7 @@ local Sound = {
 -----------------------------------------------------------------------------------------
 
 local ld = audio.loadSound('assets/sounds/music/ludumdare.mp3')
+local button = audio.loadSound('assets/sounds/sfx/button.mp3')
 
 local boos = {
     audio.loadSound('assets/sounds/sfx/boo1.mp3'),
@@ -39,7 +40,12 @@ function Sound:start()
     audio.seek(  (App.user.level-1) * Sound.TIMER, { channel=music } )
 end
 
+function Sound:startWave()
+    audio.resume(self.channels.music)
+end
+
 function Sound:stop()
+    audio.stop(self.channels.music)
 end
 
 function Sound:nextStep()
@@ -47,15 +53,13 @@ function Sound:nextStep()
 end
 
 function Sound:rewind(level, next)
-    local music = self.channels.music
     local time = (level-1) * Sound.TIMER
+    audio.pause(self.channels.music)
 
     audio.pause()
-    audio.seek( time, { channel=music } )
+    audio.seek( time, { channel=self.channels.music } )
 
     self:playBoo(function()
-        self:musicVolume(1)
-        audio.resume(music)
         next()
     end)
 end
@@ -120,6 +124,10 @@ end
 
 function Sound:playBoo(onComplete)
     self:effect( boos[math.random(1,#boos)], 0.4, onComplete )
+end
+
+function Sound:playButton()
+    self:effect( button, 0.4 )
 end
 
 function Sound:playBip()

@@ -71,7 +71,6 @@ function Score:createBar()
     self.barBG.alpha = 0
     self.barBG:setFillColor(0)
 
-    -- self:displayTitle()
     self:createProgressBar()
     self:refreshLevel()
     self:refreshPoints()
@@ -93,28 +92,6 @@ function Score:displayButtons()
             App.game:stop(true)
             Router:open(Router.HOME)
         end
-    })
-end
-
---------------------------------------------------------------------------------
-
-function Score:displayTitle()
-    if(not App.game.title) then return end
-
-    local text = display.newText(
-        self.bar,
-        App.game.title,
-        display.contentWidth*0.5 - 95, 0,
-        FONT, 35
-    )
-
-    text.anchorX = 1
-    text.alpha = 0
-
-    transition.to(text, {
-        alpha = 1,
-        time  = 2000,
-        delay = 4000
     })
 end
 
@@ -274,14 +251,10 @@ end
 
 function Score:loseLife()
     self.current.lives = self.current.lives - 1
-
-    if(self.current.lives == 0) then
-        self.current.lives = 5
-    end
     self:refreshLives()
-    -- if(self.current.lives == 0) then
-    --     App.game:stop()
-    -- end
+    if(self.current.lives == 0) then
+        App.game:stop()
+    end
 end
 
 function Score:lifePosition(i)
@@ -367,65 +340,22 @@ function Score:display()
         y        = -bg.height*0.49
     })
 
-    self:addBoardButtons(board)
+    local thanks = 'Thanks for Playing ! \n This is our game for Ludum Dare 36, \nIdea, coding and direction by Chris @ Uralys, \nMusic and sounds by Leo @ VelvetCoffee\n Drawings by Cerise, 5 years old   <3 \n\n let us know if you want more levels : )'
+
+    utils.text({
+        parent   = board,
+        value    = thanks,
+        x        = 0,
+        y        = 0,
+        font     = FONT,
+        fontSize = 20
+    })
+
+    timer.performWithDelay(800, function ()
+        self:addBoardButtons(board)
+    end)
 
     utils.easeDisplay(board)
-end
-
-function Score:bounceWonGem(board, num)
-    timer.performWithDelay(350, function()
-        local gem = self:boardGem({
-            parent = board,
-            num    = num,
-            caught = true
-        })
-
-        self.boardGems[num].alpha = 0
-        utils.easeDisplay(gem)
-        if(self.current.gems > num) then
-            self:bounceWonGem(board, num+1)
-        end
-    end)
-end
-
-function Score:boardGem(options)
-    local board = options.parent
-    local gem = display.newImage(
-        board,
-        'assets/images/gui/items/gem.icon.png'
-    );
-
-    local x,y,rotation,scale
-
-    if(options.num == 1) then
-        x        = -board.width*0.25
-        y        = board.height*0.03
-        rotation = -35
-
-    elseif(options.num == 2) then
-        x        = 0
-        y        = - board.height*0.05
-        rotation = 0
-
-    elseif(options.num == 3) then
-        x        = board.width*0.25
-        y        = board.height*0.03
-        rotation = 35
-
-    end
-
-    gem.rotation = rotation
-    gem.x        = x
-    gem.y        = y
-
-    if(not options.caught) then
-        gem.fill.effect = 'filter.desaturate'
-        gem.fill.effect.intensity = 1
-    else
-        Sound:playFinalGem(options.num)
-    end
-
-    return gem
 end
 
 --------------------------------------------------------------------------------

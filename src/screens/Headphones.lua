@@ -34,12 +34,14 @@ function scene:create( event )
     text.anchorX = 0
 
     local delay = timer.performWithDelay(4000, function()
+        Sound:playButton()
         Router:open(nextView)
     end)
 
     utils.onTap(phantom, function()
         analytics.event('game', 'phantom-headphone')
         timer.cancel(delay)
+        Sound:playButton()
         Router:open(nextView)
     end)
 

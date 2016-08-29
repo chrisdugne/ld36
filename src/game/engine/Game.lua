@@ -196,12 +196,14 @@ function Game:startWave()
             end
         end)
     end
+
+    Sound:startWave()
 end
 
 function Game:tryToSpawnBad()
     local level = self:currentLevel()
     local levelTick = Sound.TIMER / level.perTick
-     if(math.random(1,5) == BAD_BIRD) then
+     if(math.random(3,5) == BAD_BIRD) then
         timer.performWithDelay(levelTick * 0.5, function ()
             self:spawnBird(BAD_BIRD)
         end)

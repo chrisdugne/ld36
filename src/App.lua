@@ -57,6 +57,7 @@ function App:ready()
     self.game = Game:new()
     self.user = User:new()
     self.user:load()
+    self.score = Score:new()
 
     Background:init()
     if(not App.SOUND_OFF) then
@@ -97,6 +98,7 @@ function App:setup()
     ----------------------------------------------------------------------------
     ---- App globals
 
+    GOOD_BIRD = 1
     BAD_BIRD = 5
     GLOBALS = {
         savedData = utils.loadUserData('savedData.json'),

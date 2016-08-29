@@ -119,24 +119,21 @@ end
 
 function Score:increment(bird)
     if(bird.type ~= BAD_BIRD) then
-        self.current.points = self.current.points + App.user.level
-        self:refreshPoints()
         self.current.straight = self.current.straight + 1
         self:refreshStraight(bird)
+        self.current.points = self.current.points + App.user.level
+        self:refreshPoints()
+        Sound:playBip()
 
         local level = App.game:currentLevel()
         local toReach = level and level.reach
         local reached = level and self.current.straight == toReach
 
         if(reached) then
-            App.user:growLevel()
             Sound:nextStep()
-            self:refreshLevel()
-            self:resetStraight()
         end
     else
-        Sound:playBoo()
-        self:resetStraight()
+        App.game:resetWave()
     end
 end
 
@@ -224,7 +221,7 @@ function Score:resetStraight()
     self.straight = display.newGroup()
     self.bar:insert(self.straight)
 
-    for i = 1, reach do
+    for i = 1, level.spawn do
         local bird = display.newImage(
             self.straight,
             'assets/images/game/item/gem.1.png',

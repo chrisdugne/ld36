@@ -21,7 +21,7 @@ function Cerise:onCollision(event)
         local bird = event.other
         local caught = bird:catch()
         if(caught) then
-            Score:increment(bird)
+            App.score:increment(bird)
         end
     end
 end

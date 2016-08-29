@@ -1,92 +1,92 @@
 [
     {
         "--------------------" : "   Level 1",
-        "reach": 2,
-        "spawn": 4,
+        "spawn": 3,
+        "perTick": 4,
         "speed": 1
     },
     {
         "--------------------" : "   Level 2",
-        "reach": 4,
         "spawn": 4,
+        "perTick": 4,
         "speed": 1
     },
     {
         "--------------------" : "   Level 3",
-        "reach": 4,
-        "spawn": 4,
+        "spawn": 7,
+        "perTick": 8,
         "speed": 1
     },
     {
         "--------------------" : "   Level 4",
-        "reach": 4,
         "spawn": 8,
-        "speed": 1
+        "perTick": 8,
+        "speed": 1.5
     },
     {
         "--------------------" : "   Level 5",
-        "reach": 8,
         "spawn": 8,
+        "perTick": 8,
         "speed": 1
     },
     {
         "--------------------" : "   Level 6",
-        "reach": 8,
         "spawn": 8,
+        "perTick": 8,
         "speed": 2
     },
     {
         "--------------------" : "   Level 7",
-        "reach": 8,
         "spawn": 8,
+        "perTick": 8,
         "speed": 2
     },
     {
         "--------------------" : "   Level 8",
-        "reach": 8,
         "spawn": 16,
+        "perTick": 16,
         "speed": 4
     },
     {
         "--------------------" : "   Level 9",
-        "reach": 8,
         "spawn": 16,
+        "perTick": 16,
         "speed": 4
     },
     {
         "--------------------" : "   Level 10",
-        "reach": 12,
         "spawn": 16,
+        "perTick": 16,
         "speed": 4
     },
     {
         "--------------------" : "   Level 11",
-        "reach": 12,
         "spawn": 16,
+        "perTick": 16,
         "speed": 6
     },
     {
         "--------------------" : "   Level 12",
-        "reach": 16,
         "spawn": 16,
+        "perTick": 16,
         "speed": 6
     },
     {
         "--------------------" : "   Level 13",
-        "reach": 16,
         "spawn": 32,
+        "perTick": 32,
         "speed": 8
     },
     {
         "--------------------" : "   Level 14",
-        "reach": 16,
         "spawn": 32,
+        "perTick": 32,
         "speed": 8
     },
     {
         "--------------------" : "   Level 15",
-        "reach": 16,
         "spawn": 32,
+        "perTick": 32,
         "speed": 8
     }
 ]

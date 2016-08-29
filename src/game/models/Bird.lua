@@ -73,5 +73,12 @@ end
 
 --------------------------------------------------------------------------------
 
+function Bird:explode()
+    self:destroy()
+    Effects:explosion(Camera, self.body.x, self.body.y)
+end
+
+--------------------------------------------------------------------------------
+
 return Bird
 

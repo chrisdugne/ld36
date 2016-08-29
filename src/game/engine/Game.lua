@@ -42,7 +42,7 @@ function Game:start()
     Camera:center()
     Camera:start()
 
-    Score:createBar()
+    App.score:createBar()
     Background:darken()
 
     self:displayTitle()
@@ -61,7 +61,7 @@ function Game:reset()
     self:resetContent()
     App.user:resetLevel()
 
-    Score:reset()
+    App.score:reset()
 end
 
 function Game:resetContent()
@@ -81,7 +81,7 @@ function Game:stop(userExit)
     -- calculate score
 
     if(not userExit) then
-        Score:calculate (self.chapter, self.level)
+        App.score:calculate (self.chapter, self.level)
     end
 
     ------------------------------------------
@@ -89,7 +89,7 @@ function Game:stop(userExit)
     HUD:reset()
     Screen:showBands()
     Background:lighten()
-    Score:display()
+    App.score:display()
 
     ------------------------------------------
 
@@ -131,27 +131,78 @@ end
 
 --------------------------------------------------------------------------------
 
-function Game:waitForNextBird()
-    local level = self:currentLevel()
-    local nextTick = Sound.TIMER / level.spawn
-    timer.performWithDelay( nextTick , function()
-        if(self.state == Game.RUNNING) then
-            self:spawnBird()
-        end
+function Game:resetWave()
+    App.score:resetStraight()
+
+    Sound:rewind(App.user.level, function()
+        self:startWave()
     end)
+
+    for i=1,#self.futurBirds do
+        timer.cancel(self.futurBirds[i])
+        timer.cancel(self.waveChecker)
+    end
+
+    Camera:shake()
+
+    for i=#self.birds, 1, -1 do
+        self.birds[i]:explode()
+    end
 end
 
-function Game:spawnBird()
+function Game:startWave()
+    local level = self:currentLevel()
+    local levelTick = Sound.TIMER / level.perTick
+    local nb = level.spawn
+
+    self.futurBirds = {};
+    self.birds = {};
+
+    self.waveChecker = timer.performWithDelay(Sound.TIMER, function ()
+        if(App.score.current.straight == nb) then
+            App.user:growLevel()
+            App.score:refreshLevel()
+            App.score:resetStraight()
+            self:startWave()
+        else
+            self:resetWave()
+        end
+    end)
+
+    for i=1,nb do
+        self.futurBirds[i] = timer.performWithDelay(levelTick * (i-1), function ()
+            if(self.state == Game.RUNNING) then
+                self:spawnBird(GOOD_BIRD)
+                local notLast = i < level.spawn
+                if(notLast) then
+                    self:tryToSpawnBad()
+                end
+            end
+        end)
+    end
+end
+
+function Game:tryToSpawnBad()
+    local level = self:currentLevel()
+    local levelTick = Sound.TIMER / level.perTick
+     if(math.random(1,5) == BAD_BIRD) then
+        timer.performWithDelay(levelTick * 0.5, function ()
+            self:spawnBird(BAD_BIRD)
+        end)
+    end
+end
+
+function Game:spawnBird(type)
     local bird = Bird:new({
         parent = Camera,
         x = display.contentWidth * 0.5 - 20,
         y = math.random(MIN, MAX),
-        speed = 5 * self:currentLevel().speed,
-        type = math.random(1, BAD_BIRD)
+        speed = 12 * self:currentLevel().speed,
+        type = type
     })
 
     bird:show()
-    self:waitForNextBird()
+    self.birds[#self.birds+1] = bird
 end
 
 --------------------------------------------------------------------------------
@@ -179,8 +230,7 @@ function Game:render(next)
     local cerise = Cerise:new()
     cerise:show()
 
-    self:spawnBird()
-
+    self:startWave()
     Effects:restart()
 end
 

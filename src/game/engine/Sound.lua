@@ -5,7 +5,7 @@ local Sound = {
     options = {},
     clicks = {},
     channels = {},
-    TIMER = 8727
+    TIMER = 17454
 }
 
 -----------------------------------------------------------------------------------------
@@ -13,48 +13,53 @@ local Sound = {
 local ld = audio.loadSound('assets/sounds/music/ludumdare.mp3')
 
 local boos = {
-    audio.loadSound('assets/sounds/music/boo1.mp3'),
-    audio.loadSound('assets/sounds/music/boo2.mp3'),
-    audio.loadSound('assets/sounds/music/boo3.mp3')
+    audio.loadSound('assets/sounds/sfx/boo1.mp3'),
+    audio.loadSound('assets/sounds/sfx/boo2.mp3'),
+    audio.loadSound('assets/sounds/sfx/boo3.mp3')
+}
+
+local bips = {
+    audio.loadSound('assets/sounds/sfx/bip1.mp3'),
+    audio.loadSound('assets/sounds/sfx/bip2.mp3')
 }
 
 local yeahs = {
-    audio.loadSound('assets/sounds/music/yeah1.mp3'),
-    audio.loadSound('assets/sounds/music/yeah2.mp3'),
-    audio.loadSound('assets/sounds/music/yeah4.mp3'),
-    audio.loadSound('assets/sounds/music/yeah3.mp3')
+    audio.loadSound('assets/sounds/sfx/yeah2.mp3'),
+    audio.loadSound('assets/sounds/sfx/yeah4.mp3')
 }
 
 -----------------------------------------------------------------------------------------
 
 function Sound:start()
-    self.currentStep = 0
-    self.clicks = {}
     self.channels.music = audio.play(ld)
-    self:prepareClicks()
 end
 
 function Sound:stop()
-    for i=1,1000 do
-        timer.cancel(self.clicks[i])
-    end
-end
-
-function Sound:prepareClicks()
-    for i=1,1000 do
-        self.clicks[i] = timer.performWithDelay(self.TIMER*i, function ()
-            self:seek(self.TIMER * self.currentStep)
-        end)
-    end
 end
 
 function Sound:nextStep()
-    self.currentStep = self.currentStep + 1
     self:playYeah()
+    self:startTransition()
 end
 
-function Sound:seek(time)
-    audio.seek( time, { channel=self.channels.music } )
+function Sound:rewind(level, next)
+    local music = self.channels.music
+    local time = (level-1) * Sound.TIMER
+
+    audio.pause()
+    audio.seek( time, { channel=music } )
+
+    self:playRewind(function()
+        self:musicVolume(1)
+        audio.resume(music)
+        next()
+    end)
+end
+
+--------------------------------------------------------------------------------
+
+function Sound:playRewind(onComplete)
+    self:effect( boos[1], 0.4, onComplete )
 end
 
 --------------------------------------------------------------------------------
@@ -104,9 +109,11 @@ end
 
 --------------------------------------------------------------------------------
 
-function Sound:effect(effect, value)
+function Sound:effect(effect, value, onComplete)
     if(not self.isOff and not App.SOUND_OFF) then
-        self.channels.effect = audio.play(effect)
+        self.channels.effects = audio.play(effect, {
+            onComplete=function() if(onComplete) then onComplete() end end
+        })
         self:effectsVolume(value or 1)
     end
 end
@@ -115,6 +122,10 @@ end
 
 function Sound:playBoo()
     self:effect( boos[math.random(1,#boos)], 0.4 )
+end
+
+function Sound:playBip()
+    self:effect( bips[math.random(1,#bips)], 0.1 )
 end
 
 function Sound:playYeah()

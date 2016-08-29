@@ -11,6 +11,12 @@ local INIT_Y = display.contentHeight*0.5
 
 --------------------------------------------------------------------------------
 
+local xShake = 16
+local yShake = 8
+local shakePeriod = 2
+
+--------------------------------------------------------------------------------
+
 function Camera:insert(stuff)
     self.display:insert(stuff)
 end
@@ -50,6 +56,38 @@ function Camera:start(options)
     self.display.alpha = 1
 
     App.hud:toFront()
+
+    local shake = function()
+        if(self.shakeCount % shakePeriod == 0 ) then
+            self.display.x = self.display.x0 + math.random( -xShake, xShake )
+            self.display.y = self.display.y0 + math.random( -yShake, yShake )
+        end
+        self.shakeCount = self.shakeCount + 1
+    end
+
+    function startShake()
+        self.display.x0 = self.display.x
+        self.display.y0 = self.display.y
+        self.shakeCount = 0
+        Runtime:addEventListener( 'enterFrame', shake )
+    end
+
+    function stopShake()
+        Runtime:removeEventListener( 'enterFrame', shake )
+        self.display.x = INIT_X
+        self.display.y = INIT_Y
+        self.shaking = false
+    end
+
+    function Camera:shake()
+        if(self.shaking) then
+            timer.cancel(self.shaking)
+            stopShake()
+        end
+
+        startShake()
+        self.shaking = timer.performWithDelay(200, stopShake)
+    end
 
     function Camera:stop()
         transition.to (self.display, {

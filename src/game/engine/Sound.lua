@@ -49,17 +49,11 @@ function Sound:rewind(level, next)
     audio.pause()
     audio.seek( time, { channel=music } )
 
-    self:playRewind(function()
+    self:playBoo(function()
         self:musicVolume(1)
         audio.resume(music)
         next()
     end)
-end
-
---------------------------------------------------------------------------------
-
-function Sound:playRewind(onComplete)
-    self:effect( boos[1], 0.4, onComplete )
 end
 
 --------------------------------------------------------------------------------
@@ -120,8 +114,8 @@ end
 
 --------------------------------------------------------------------------------
 
-function Sound:playBoo()
-    self:effect( boos[math.random(1,#boos)], 0.4 )
+function Sound:playBoo(onComplete)
+    self:effect( boos[math.random(1,#boos)], 0.4, onComplete )
 end
 
 function Sound:playBip()

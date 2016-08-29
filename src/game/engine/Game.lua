@@ -134,6 +134,7 @@ end
 
 function Game:resetWave()
     App.score:resetStraight()
+    Camera:shake()
 
     Sound:rewind(App.user.level, function()
         self:startWave()
@@ -144,7 +145,6 @@ function Game:resetWave()
         timer.cancel(self.waveChecker)
     end
 
-    Camera:shake()
 
     for i=#self.birds, 1, -1 do
         self.birds[i]:explode()

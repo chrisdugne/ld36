@@ -46,8 +46,9 @@ function Bird:show()
         if(self.body.x == nil) then
             Runtime:removeEventListener( 'enterFrame', self.move )
         else
-            if(self.body.x < - display.contentWidth) then
-                self:destroy()
+            if(self.body.x < - display.contentWidth * 0.5) then
+                self:explode()
+                App.game:resetWave()
             end
             self.body.x = self.body.x - self.speed
         end

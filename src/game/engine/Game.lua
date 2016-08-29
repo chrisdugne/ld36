@@ -59,7 +59,7 @@ function Game:reset()
     HUD:reset()
     self:resetContent()
     App.user:resetLevel()
-    App.user.level = 5
+    -- App.user.level = 8
 
     App.score:reset()
 end

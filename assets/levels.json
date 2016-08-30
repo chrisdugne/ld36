@@ -3,90 +3,105 @@
         "--------------------" : "   Level 1",
         "spawn": 4,
         "perTick": 4,
+        "congrats": "",
         "speed": 1
     },
     {
         "--------------------" : "   Level 2",
         "spawn": 7,
         "perTick": 8,
+        "congrats": "Well done !",
         "speed": 1
     },
     {
         "--------------------" : "   Level 3",
         "spawn": 7,
         "perTick": 8,
+        "congrats": "Go on!",
         "speed": 1
     },
     {
         "--------------------" : "   Level 4",
         "spawn": 8,
         "perTick": 8,
+        "congrats": "Unbelievable..",
         "speed": 1.5
     },
     {
         "--------------------" : "   Level 5",
         "spawn": 15,
         "perTick": 16,
+        "congrats": "Awesoooome !",
         "speed": 1.5
     },
     {
         "--------------------" : "   Level 6",
         "spawn": 15,
         "perTick": 16,
+        "congrats": "Who's the boss ?",
         "speed": 2
     },
     {
         "--------------------" : "   Level 7",
         "spawn": 15,
         "perTick": 16,
+        "congrats": "Come ON!",
         "speed": 2
     },
     {
         "--------------------" : "   Level 8",
         "spawn": 15,
         "perTick": 16,
+        "congrats": "You're doing it !!",
         "speed": 2
     },
     {
         "--------------------" : "   Level 9",
         "spawn": 29,
         "perTick": 32,
+        "congrats": "Duuude !",
         "speed": 2
     },
     {
         "--------------------" : "   Level 10",
         "spawn": 30,
         "perTick": 32,
+        "congrats": "Chuck Norris didn't do this far !!",
         "speed": 2
     },
     {
         "--------------------" : "   Level 11",
         "spawn": 30,
         "perTick": 32,
+        "congrats": "Now you're a robot, you know.",
         "speed": 2
     },
     {
         "--------------------" : "   Level 12",
         "spawn": 25,
         "perTick": 32,
+        "congrats": "We love youuuuu kiddo ! ",
         "speed": 2
     },
     {
         "--------------------" : "   Level 13",
         "spawn": 55,
         "perTick": 64,
+        "congrats": "2 more left, you're doing it !!",
         "speed": 1.5
     },
     {
         "--------------------" : "   Level 14",
         "spawn": 28,
         "perTick": 32,
+        "congrats": "The laaast one ! Hang on you mad player !",
         "speed": 1.5
     },
     {
         "--------------------" : "   Level 15",
         "spawn": 28,
         "perTick": 32,
+        "congrats": "Sobbing..you actually did it buddy..thank you !",
         "speed": 1.5
     }
 ]

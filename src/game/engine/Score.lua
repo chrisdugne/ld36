@@ -110,6 +110,7 @@ function Score:increment(bird)
 
         if(reached) then
             Sound:nextStep()
+            App.game:displayTitle(level.congrats)
         end
     else
         App.game:resetWave()

@@ -46,7 +46,14 @@ function Game:start()
     App.score:createBar()
     Background:darken()
 
-    self:displayTitle()
+    self:displayTitle('Uralys presents', function()
+        self:displayTitle('Cerise\'s music ride', function()
+            self:displayTitle('Music by VelvetCoffee', function()
+
+            end)
+        end)
+    end)
+
     self:render()
 
     Sound:start()
@@ -59,15 +66,10 @@ function Game:reset()
     HUD:reset()
     self:resetContent()
     App.user:resetLevel()
-    -- App.user.level = 8
-
     App.score:reset()
 end
 
 function Game:resetContent()
-    -- here you can reset your content
-    -- utils.emptyTable(self.stuff)
-    self.title = 'LD36'
     self.futurBirds = {};
     self.birds = {};
 end
@@ -118,10 +120,10 @@ end
 
 --------------------------------------------------------------------------------
 
-function Game:displayTitle()
+function Game:displayTitle(title, next)
     local introText = display.newText(
         App.hud,
-        self.title,
+        title,
         0, 0,
         FONT, 45
     )
@@ -140,7 +142,10 @@ function Game:displayTitle()
             transition.to( introText, {
                 time  = 3200,
                 alpha = 0,
-                x     = display.contentWidth * 0.16
+                x     = display.contentWidth * 0.16,
+                onComplete = function()
+                    if(next) then next() end
+                end
             })
         end
     })
@@ -161,9 +166,7 @@ function Game:resetWave()
 end
 
 function Game:startWave()
-    print('startWave')
     if(self.state == Game.STOPPED) then
-        print('wave cancelled')
         return
     end
 

@@ -128,7 +128,7 @@ settings = {
     },
 
     excludeFiles = {
-        all = { "docs/*", "Icon.png" },
+        all = { "docs/*", "Icon.png", "builds/*" },
 
         -- Include only the necessary icon files on each platform
         iphone = { "Icon-*dpi.png" },
